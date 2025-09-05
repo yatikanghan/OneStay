@@ -17,8 +17,9 @@ body {
     display: inline;
     vertical-align: middle;
 }
+
 .logo h1{
     display: inline;
     vertical-align: middle;
-    font-family: fantasy;
+    font-family: fantasy ;
 }
