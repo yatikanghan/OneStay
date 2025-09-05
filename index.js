@@ -52,3 +52,21 @@ app.post('/addnewlisting', async (req,res) => {
     await newListing.save();
     res.redirect('/');
 });
+
+app.get('/editlisting/:id', async (req,res) => {
+    let {id} = req.params;
+    const List = await Listing.findById(id);
+    res.render("editlisting.ejs", { list : List});
+});
+
+app.post('/editlisting/:id', async (req,res) => {
+    let {id} = req.params;
+    await Listing.findByIdAndUpdate(id, req.body);
+    res.redirect('/');
+});
+
+app.post('/deletelisting/:id', async (req,res) => {
+    let {id} = req.params;
+    await Listing.findByIdAndDelete(id);
+    res.redirect('/');
+});
