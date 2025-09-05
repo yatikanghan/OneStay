@@ -1,0 +1,24 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.mainheader {
+    background-color: aqua;
+    padding: 10px;
+}
+.mainheader h1{
+    font-size: xx-large;
+}
+.logo{
+    vertical-align: middle;
+}
+.logo img{
+    display: inline;
+    vertical-align: middle;
+}
+.logo h1{
+    display: inline;
+    vertical-align: middle;
+    font-family: fantasy;
+}
