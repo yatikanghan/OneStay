@@ -6,7 +6,8 @@ const Listing = require('./models/listing.js');
 
 const port = 3000;
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static("public")); 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));    
@@ -33,4 +34,12 @@ app.listen(port, () => {
 // root route
 app.get('/', async (req, res) => {
     res.render('index.ejs', {listings: await Listing.find({})});
+});
+
+app.get('/listing/:id', async (req,res) => {
+    let {id} = req.params;
+    const List = await Listing.findById(id);
+    res.render("listingdetails.ejs", { list : List});
+    
+    
 });
