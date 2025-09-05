@@ -21,14 +21,25 @@
     </div>
 </header>
 <section>
+    <br><br>
     <div class="container">
         <div class="row">
-            <h3> Listing Details </h3>
-        </div>
-        <div class="container">
-            <div class="row">
-                <p><%= list.title %></p>
+            <div class="col-lg-12 col-sm-12 ml-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="listdetailimg">
+                            <img src="<%= list.image %>" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <br><br><br>
+                <h2><%= list.title %></h2>
+                <br><br>
+                <p>Description : </p>
                 <p><%= list.description %></p>
+                <p><b>Price : €<%= list.price %></b></p>       
             </div>
         </div>
     </div>

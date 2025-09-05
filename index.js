@@ -40,6 +40,15 @@ app.get('/listing/:id', async (req,res) => {
     let {id} = req.params;
     const List = await Listing.findById(id);
     res.render("listingdetails.ejs", { list : List});
-    
-    
+        
+});
+
+app.get('/addnewlisting', (req,res) => {
+    res.render("newlisting.ejs");
+});
+
+app.post('/addnewlisting', async (req,res) => {
+    const newListing = new Listing(req.body);
+    await newListing.save();
+    res.redirect('/');
 });

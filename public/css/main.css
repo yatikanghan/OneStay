@@ -24,3 +24,49 @@ body {
     font-family: fantasy ;
     margin-left: 10px;
 }
+.newlistbrn button{
+    padding: 10px 50px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: rgb(154, 69, 233);
+    color: white;
+    border-radius: 10px;
+    font-size: 16px;
+    border: none;
+}
+.listcard{
+    color: #000;
+    background-color: rgb(239, 233, 247);
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+}
+.listimg img {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+    
+}
+.listcarddetails{
+    padding: 10px;
+    max-height: 130px;
+    object-fit: cover;
+}
+.towside{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.checked {
+  color: orange;
+}
+.listdetailimg{
+    text-align: center;
+}
+.listdetailimg img{
+    object-fit: cover;
+    border-radius: 10px;
+    height: 600px;
+    width: 80%;
+    object-fit: cover;
+}

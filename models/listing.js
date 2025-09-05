@@ -10,7 +10,8 @@ const listingschema = new mongoose.Schema({
     },
     image: {
         type: String,
-        set: (v) => v === '' ? 'https://cdn.pixabay.com/photo/2015/04/21/12/01/mailbox-733161_1280.jpg' : v
+        set: (v) => v === '' ? 'https://cdn.pixabay.com/photo/2015/04/21/12/01/mailbox-733161_1280.jpg' : v,
+        default: 'https://cdn.pixabay.com/photo/2015/04/21/12/01/mailbox-733161_1280.jpg'
     },
     price: {
         type: Number,
