@@ -31,6 +31,13 @@ app.listen(port, () => {
   console.log(`Server is Started ...`);
 });
 
+
+// middleware
+app.use(function  (req, res, next) {
+    console.log("Log Details : ", req.originalUrl, req.method, (new Date()).toLocaleString());
+    next()
+});
+
 // root route
 app.get('/', async (req, res) => {
     res.render('index.ejs', {listings: await Listing.find({})});
@@ -62,7 +69,7 @@ app.get('/editlisting/:id', async (req,res) => {
 app.post('/editlisting/:id', async (req,res) => {
     let {id} = req.params;
     await Listing.findByIdAndUpdate(id, req.body);
-    res.redirect('/');
+    res.redirect('/'); 
 });
 
 app.post('/deletelisting/:id', async (req,res) => {
