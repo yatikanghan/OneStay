@@ -33,10 +33,14 @@ app.listen(port, () => {
 
 
 // middleware
-app.use(function  (req, res, next) {
-    console.log("Log Details : ", req.originalUrl, req.method, (new Date()).toLocaleString());
-    next()
-});
+// app.use("/",function  (req, res, next) {
+//     let { token } = req.query;
+//     if (token === "123") {
+//         next();
+//     } else {
+//         res.send("Invalid Token");
+//     }
+// });
 
 // root route
 app.get('/', async (req, res) => {
@@ -77,3 +81,4 @@ app.post('/deletelisting/:id', async (req,res) => {
     await Listing.findByIdAndDelete(id);
     res.redirect('/');
 });
+
