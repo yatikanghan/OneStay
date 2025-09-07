@@ -27,5 +27,6 @@ const listingschema = new mongoose.Schema({
     }
 });
 
+
 const Listing = mongoose.model('Listing', listingschema);
 module.exports = Listing;
