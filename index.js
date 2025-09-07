@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const Listing = require('./models/listing.js');
+const Review = require('./models/review.js');
 
 const port = 3000;
 
@@ -32,6 +33,7 @@ app.listen(port, () => {
 });
 
 
+
 // middleware
 // app.use("/",function  (req, res, next) {
 //     let { token } = req.query;
@@ -46,6 +48,11 @@ app.listen(port, () => {
 app.get('/', async (req, res) => {
     res.render('index.ejs', {listings: await Listing.find({})});
 });
+
+app.get('/err', (req, res) => {
+    let abcd = abcd;
+});
+
 
 app.get('/listing/:id', async (req,res) => {
     let {id} = req.params;
@@ -64,7 +71,7 @@ app.post('/addnewlisting', async (req,res) => {
     res.redirect('/');
 });
 
-app.get('/editlisting/:id', async (req,res) => {
+ app.get('/editlisting/:id', async (req,res) => {
     let {id} = req.params;
     const List = await Listing.findById(id);
     res.render("editlisting.ejs", { list : List});
@@ -82,3 +89,20 @@ app.post('/deletelisting/:id', async (req,res) => {
     res.redirect('/');
 });
 
+app.post('/postreviews/:id',async (req,res) => {
+    let {id} = req.params;
+    let {rating, comment} = req.body;
+    const review = new Review({rating, comment});
+    const listing = await Listing.findById(id); 
+    listing.reviews.push(review);
+    await listing.save();
+    await review.save();
+    res.redirect('/'); 
+            
+});
+
+
+app.use((err, req, res, next) => {
+    console.log(err); 
+    next();
+});
