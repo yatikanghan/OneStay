@@ -7,6 +7,17 @@ const Review = require('./models/review.js');
 const Joy = require('joi');
 const {listingschema} = require('./Listingschema.js');
 const {reviewschema} = require('./Listingschema.js');
+const session = require('express-session');
+
+app.use(session({
+    secret : 'thisisasecret',
+    resave : false,
+    saveUninitialized : true,
+    cookie : { 
+        expires : Date.now() + 10000,
+        maxAge : 10000
+     }
+}));
 
 const port = 3000;
 
@@ -16,7 +27,6 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));    
 app.use(express.json());
-
 
 // database connection
 async function dbconnect() {
@@ -50,6 +60,8 @@ app.listen(port, () => {
 
 // root route
 app.get('/', async (req, res) => {
+    req.session.user = "Admin";
+    console.log(req.session.user);
     res.render('index.ejs', {listings: await Listing.find({})});
 });
 
