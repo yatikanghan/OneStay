@@ -4,6 +4,9 @@ const path = require('path');
 const mongoose = require('mongoose');
 const Listing = require('./models/listing.js');
 const Review = require('./models/review.js');
+const Joy = require('joi');
+const {listingschema} = require('./Listingschema.js');
+const {reviewschema} = require('./Listingschema.js');
 
 const port = 3000;
 
@@ -34,6 +37,7 @@ app.listen(port, () => {
 
 
 
+
 // middleware
 // app.use("/",function  (req, res, next) {
 //     let { token } = req.query;
@@ -56,7 +60,7 @@ app.get('/err', (req, res) => {
 
 app.get('/listing/:id', async (req,res) => {
     let {id} = req.params;
-    const List = await Listing.findById(id);
+    const List = await Listing.findById(id).populate('reviews');
     res.render("listingdetails.ejs", { list : List});
         
 });
@@ -66,6 +70,8 @@ app.get('/addnewlisting', (req,res) => {
 });
 
 app.post('/addnewlisting', async (req,res) => {
+    // let result = listingschema.validate(req.body);
+    // console.log(result);
     const newListing = new Listing(req.body);
     await newListing.save();
     res.redirect('/');
@@ -85,6 +91,10 @@ app.post('/editlisting/:id', async (req,res) => {
 
 app.post('/deletelisting/:id', async (req,res) => {
     let {id} = req.params;
+    let listing = await Listing.findById(id);
+    for(let reviewid of listing.reviews) {
+        await Review.findByIdAndDelete(reviewid);
+    }
     await Listing.findByIdAndDelete(id);
     res.redirect('/');
 });
@@ -95,11 +105,21 @@ app.post('/postreviews/:id',async (req,res) => {
     const review = new Review({rating, comment});
     const listing = await Listing.findById(id); 
     listing.reviews.push(review);
-    await listing.save();
     await review.save();
+    await listing.save();
     res.redirect('/'); 
             
 });
+
+app.post('/:id/deletereview/:reviewid', async (req,res) => {
+    let {id, reviewid} = req.params;
+    let listing = await Listing.findById(id);
+    listing.reviews.pull(reviewid);
+    await Review.findByIdAndDelete(reviewid);
+    await listing.save();
+    res.redirect('/listing/' + id);
+});
+
 
 
 app.use((err, req, res, next) => {
