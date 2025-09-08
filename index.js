@@ -8,6 +8,11 @@ const Joy = require('joi');
 const {listingschema} = require('./Listingschema.js');
 const {reviewschema} = require('./Listingschema.js');
 const session = require('express-session');
+const flash = require('connect-flash');
+
+const port = 3000;
+
+app.use(flash());
 
 app.use(session({
     secret : 'thisisasecret',
@@ -19,7 +24,13 @@ app.use(session({
      }
 }));
 
-const port = 3000;
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    res.locals.listnotexist = req.flash('listnotexist');
+    next();
+});
+
 
 // app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static("public")); 
@@ -65,6 +76,7 @@ app.get('/', async (req, res) => {
     res.render('index.ejs', {listings: await Listing.find({})});
 });
 
+
 app.get('/err', (req, res) => {
     let abcd = abcd;
 });
@@ -73,7 +85,12 @@ app.get('/err', (req, res) => {
 app.get('/listing/:id', async (req,res) => {
     let {id} = req.params;
     const List = await Listing.findById(id).populate('reviews');
+    if(!List){
+        req.flash("listnotexist", "This Listing is not exist!");
+        res.redirect('/');
+    }else {
     res.render("listingdetails.ejs", { list : List});
+    }
         
 });
 
@@ -86,6 +103,7 @@ app.post('/addnewlisting', async (req,res) => {
     // console.log(result);
     const newListing = new Listing(req.body);
     await newListing.save();
+    req.flash('success', '✅ New listing created successfully!');
     res.redirect('/');
 });
 
