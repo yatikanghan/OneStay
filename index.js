@@ -9,6 +9,19 @@ const {listingschema} = require('./Listingschema.js');
 const {reviewschema} = require('./Listingschema.js');
 const session = require('express-session');
 const flash = require('connect-flash');
+const multer = require('multer');
+
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
+
+// ---------------------------------------------
+
+cloudinary.config({
+  cloud_name: 'dunqhg4uq',
+  api_key: '495823826719684',
+  api_secret: 'T5BRSKgc5AryRjmYgJvqNFBIyV0'
+});
+// ---------------------------------------------
 
 const port = 3000;
 
@@ -24,6 +37,14 @@ app.use(session({
      }
 }));
 
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'listings', // folder name in Cloudinary
+    allowed_formats: ['jpg', 'png', 'jpeg']
+  }
+});
+const upload = multer({ storage });
 
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
@@ -98,13 +119,34 @@ app.get('/addnewlisting', (req,res) => {
     res.render("newlisting.ejs");
 });
 
-app.post('/addnewlisting', async (req,res) => {
-    // let result = listingschema.validate(req.body);
-    // console.log(result);
-    const newListing = new Listing(req.body);
-    await newListing.save();
-    req.flash('success', '✅ New listing created successfully!');
-    res.redirect('/');
+// app.post('/addnewlisting', async (req,res) => {
+//     // let result = listingschema.validate(req.body);
+//     // console.log(result);
+//     const newListing = new Listing(req.body);
+//     await newListing.save();
+//     req.flash('success', '✅ New listing created successfully!');
+//     res.redirect('/');
+// });
+app.post('/addnewlisting', upload.single('image'), async (req, res) => {
+    try {
+        console.log("Uploaded file:", req.file);
+        console.log(req.file.path);
+        const newListing = new Listing({
+            title: req.body.title,
+            address: req.body.address,
+            country: req.body.country,
+            price: req.body.price,
+            description: req.body.description,
+            image: req.file.path.toString() // fallback to schema default
+        });
+
+        await newListing.save();
+        req.flash('success', '✅ New listing created successfully!');
+        res.redirect('/');
+    } catch (err) {
+        console.error(err);
+        res.redirect('/');
+    }
 });
 
  app.get('/editlisting/:id', async (req,res) => {

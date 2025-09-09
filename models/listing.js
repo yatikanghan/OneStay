@@ -1,18 +1,11 @@
 const mongoose = require('mongoose');
-
 const listingschema = new mongoose.Schema({
     title: {    
         type: String, 
         required: true
     },
-    description: {
-        type: String,
-    },
-    image: {
-        type: String,
-        set: (v) => v === '' ? 'https://cdn.pixabay.com/photo/2015/04/21/12/01/mailbox-733161_1280.jpg' : v,
-        default: 'https://cdn.pixabay.com/photo/2015/04/21/12/01/mailbox-733161_1280.jpg'
-    },
+    description: String,
+    image: String,
     price: {
         type: Number,
         required: true
@@ -27,7 +20,7 @@ const listingschema = new mongoose.Schema({
     },
     reviews: [
         {
-            type:  mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Review'
         }
     ]
@@ -36,3 +29,5 @@ const listingschema = new mongoose.Schema({
 
 const Listing = mongoose.model('Listing', listingschema);
 module.exports = Listing;
+
+
